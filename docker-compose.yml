@@ -1,0 +1,9 @@
+services:
+  tests:
+    build: .
+    environment:
+      SAUCEDEMO_BASE_URL: ${SAUCEDEMO_BASE_URL:-}
+      REQRES_BASE_URL: ${REQRES_BASE_URL:-}
+    volumes:
+      - ./test-results:/work/test-results
+      - ./playwright-report:/work/playwright-report

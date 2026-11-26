@@ -30,24 +30,45 @@ Playwright automation for the **SauceDemo** (Swag Labs) UI and the **Reqres** RE
 
 ## Prerequisites
 
-- Node.js and npm
 - Internet access to SauceDemo and Reqres (or reachable deployments)
-- Playwright Chromium browser
+- To run in Docker: Docker Desktop or Docker Engine with Docker Compose v2
+- To run locally: Node.js and npm
 
-## Setup
+## Run tests in Docker
 
-```powershell
+From the repository root, run:
+
+```sh
+docker compose run --build --rm tests
+```
+
+This builds the Playwright environment, installs project dependencies inside the image, and runs all UI and API tests. Node.js, npm, and browser dependencies do not need to be installed on the host. Test results and the HTML report are written to `test-results/` and `playwright-report/`.
+
+Docker Compose reads `.env` from the repository root, so optional base URL overrides can be set there:
+
+```dotenv
+SAUCEDEMO_BASE_URL=https://www.saucedemo.com/
+REQRES_BASE_URL=https://reqres.in/
+```
+
+The container image uses the Playwright version pinned by `package-lock.json`; update the image tag in `Dockerfile` when upgrading Playwright.
+
+## Run tests locally
+
+Install Node.js and npm, then run:
+
+```sh
 npm install
 npx playwright install chromium
 ```
 
-Environment variables (`.env` / CI):
+Environment variables (CI or your shell):
 - `SAUCEDEMO_BASE_URL` (default: `https://www.saucedemo.com/`)
 - `REQRES_BASE_URL` (default: `https://reqres.in/`)
 
 ## Run tests
 
-```powershell
+```sh
 # all projects
 npm test
 
@@ -62,9 +83,15 @@ npm run test:ui
 npm run test:report
 ```
 
-PowerShell overrides:
+For local runs, set base URL overrides in your shell:
+
+```sh
+# Bash
+SAUCEDEMO_BASE_URL=https://www.saucedemo.com/ REQRES_BASE_URL=https://reqres.in/ npm test
+```
 
 ```powershell
+# PowerShell
 $env:SAUCEDEMO_BASE_URL = 'https://www.saucedemo.com/'
 $env:REQRES_BASE_URL = 'https://reqres.in/'
 npm test
